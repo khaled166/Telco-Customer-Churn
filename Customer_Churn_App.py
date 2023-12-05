@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import joblib
+import sklearn
 
 
 Inputs = joblib.load("Inputs.pkl")
@@ -8,6 +9,8 @@ Model = joblib.load("Model.pkl")
 
 def prediction(SeniorCitizen, Partner, Dependents, tenure, PhoneService,MultipleLines, InternetService, OnlineSecurity, OnlineBackup,DeviceProtection,
   TechSupport, Contract, PaperlessBilling,PaymentMethod, MonthlyCharges, TotalCharges,tenure_MonthlyCharges_Segment, Streaming):
+
+    
     
     test_df = pd.DataFrame(columns=Inputs)
     test_df.at[0,"SeniorCitizen"] = SeniorCitizen
@@ -38,6 +41,7 @@ def prediction(SeniorCitizen, Partner, Dependents, tenure, PhoneService,Multiple
 
     
 def main():
+    
     st.title("Telco Customer Churn")
     SeniorCitizen = st.selectbox("SeniorCitizen" , [0, 1])
     Partner = st.selectbox("Partner" , ['Yes', 'No'])
@@ -55,19 +59,20 @@ def main():
     PaymentMethod = st.selectbox("PaymentMethod" , ['Electronic check' , 'Mailed check' , 'Bank transfer (automatic)', 'Credit card (automatic)'])
     MonthlyCharges = st.slider("MonthlyCharges" , min_value= 0 , max_value= 2000 , value=0,step=1)
     TotalCharges = st.slider("TotalCharges" , min_value= 0 , max_value= 20000 , value=0,step=1)
-    tenure_MonthlyCharges_Segment = st.selectbox("tenure_MonthlyCharges_Segment" , ['Low Value Low Trust' 'Low Value High Trust' 'High Value Low Trust'
- 'High Value High Trust'])
+    tenure_MonthlyCharges_Segment = st.selectbox("tenure_MonthlyCharges_Segment" , ['Low Value Low Trust' , 'Low Value High Trust', 'High Value Low Trust' ,
+    'High Value High Trust'])
     Streaming = st.selectbox("Contract" , ['No Streaming Service' , 'Yes All Streaming Services' , 'StreamingTV', 'No internet service' , 'StreamingMovies'])
 
 
 
     
     if st.button("predict"):
+        
         result = prediction(SeniorCitizen, Partner, Dependents, tenure, PhoneService,MultipleLines, InternetService, OnlineSecurity,OnlineBackup,
-DeviceProtection,TechSupport, Contract, PaperlessBilling,PaymentMethod, MonthlyCharges, TotalCharges,tenure_MonthlyCharges_Segment, Streaming)
+        DeviceProtection,TechSupport, Contract, PaperlessBilling,PaymentMethod, MonthlyCharges, TotalCharges,tenure_MonthlyCharges_Segment, Streaming)
         label = ["Fail" , "Success"]
         st.text(f"The Resturant will {label[result]}")
         
+
 if __name__ == '__main__':
-    main()    
-    
+    main()
